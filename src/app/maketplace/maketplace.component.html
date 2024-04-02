@@ -1,0 +1,178 @@
+<app-header></app-header>
+<div class="container-fluid py-6 my-4">
+  <img src="assets/img/bannerMaketplace.png" alt="" class="w-100 maket shadow">
+</div>
+
+<div class="container text-center">
+  <div class="row mb-3">
+    <div class="col-sm-12 col-lg-4">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Rechercher un produit" aria-label="Rechercher"
+          aria-describedby="button-addon2" [(ngModel)]="filterValue" (keyup)="onSearch()">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass" style="color: #FF9700;"></i></button>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-lg-4 ms-auto ">
+      <button type="button" class="btn btn-custom btn-md" data-bs-toggle="modal"
+      data-bs-target="#exampleModal">Ajouter un produit</button>
+    </div>
+  </div>
+
+
+
+</div>
+
+<!-- card -->
+<div class="container">
+
+
+<div class="row g-4">
+
+  <div class="col-12 col-md-6 col-lg-4" *ngFor="let item of produitListFilter | slice:(pageActuelle - 1) * articleParPage:(pageActuelle * articleParPage)">
+    <div class="card shadow">
+      <img  src="http://localhost:8000/images/{{this.item.images}}" class="card-img-top rounded-top" alt="Designer desk">
+      <div class="card-body">
+        <div class="media d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <span class="small">{{item.prix}} fcfa</span>
+          </div>
+        </div>
+        <h3 class="h5 card-title mt-4">{{item.nom_produit}}</h3>
+        <p class="card-text">{{item.contact}}</p>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- pagination -->
+<div class="demo ">
+  <nav class="pagination-outer" aria-label="Page navigation">
+    <div class="pagination shadow-lg">
+        <button class="page-item page-link"  [disabled]="pageActuelle === 1" (click)="pageActuelle = pageActuelle - 1" class="page-link" aria-label="Previous" >
+          <span aria-hidden="true">«</span>
+        </button>
+
+      <button class="page-item page-link active" *ngFor="let page of pages" (click)="pageActuelle = page" class="page-link" [style.background]="page === pageActuelle ? 'orange' : 'white'"> {{ page }}</button>
+        <button class="page-item page-link" [disabled]="pageActuelle === totalPages" (click)="pageActuelle = pageActuelle + 1" class="page-link" aria-label="Next" >
+          <span aria-hidden="true">»</span>
+        </button>
+    </div>
+  </nav>
+</div>
+
+
+</div>
+</div>
+
+
+
+<!-- end card -->
+
+
+
+
+
+
+
+<app-footer></app-footer>
+<!-- Modal ajout-->
+ <div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Ajout produit</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form action="">
+        <div class="modal-body">
+          <div class="row">
+              <div class="form-group col-md-6">
+                <label for="description">Nom</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nom"
+                  placeholder=""
+                  name="nom_produit"
+                  [(ngModel)]="nom_produit" (input)="verifNom_produitFonction()"
+                />
+                <p class="text-danger" *ngIf="!exactNom_produit">{{verifNom_produit}}</p>
+                    <p class="text-success" *ngIf="exactNom_produit"><i class="bi bi-check2-all"></i> Exact !</p>
+
+              </div>
+              <div class="form-group col-md-6">
+                <label for="image">Image</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="image"
+                  placeholder=""
+                  name="image"
+                  (change)="getFile($event)" (input)="verifImageFonction()"
+                />
+                <p class="text-danger" *ngIf="!exactImage">{{verifImage}}</p>
+                <p class="text-success" *ngIf="exactImage"><i class="bi bi-check2-all"></i> Exact !</p>
+
+              </div>
+          </div>
+          <div class="row">
+              <div class="form-group col-md-6">
+                <label for="date">Prix</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="adress"
+                  placeholder=""
+                  name="prix"
+                  [(ngModel)]="prix"  (input)="verifPrixFonction()"
+                />
+                <p class="text-danger" *ngIf="!exactPrix">{{verifPrix}}</p>
+                    <p class="text-success" *ngIf="exactPrix"><i class="bi bi-check2-all"></i> Exact !</p>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="lieu">Contact</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="contact"
+                  placeholder="Contact"
+                  name="contact"
+                  [(ngModel)]="contact"  (input)="verifContactFonction()"
+                />
+                <p class="text-danger" *ngIf="!exactContact">{{verifContact}}</p>
+                    <p class="text-success" *ngIf="exactContact"><i class="bi bi-check2-all"></i> Exact !</p>
+              </div>
+          </div>
+
+
+
+
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" *ngIf="exactContact == false || exactNom_produit == false || exactPrix == false || exactImage == false" disabled >
+          Ajouter
+        </button>
+        <button type="button" class="btn btn-primary" *ngIf="exactContact === true && exactNom_produit === true && exactPrix === true && exactImage === true"  (click)="onSubmit()" data-bs-dismiss="modal">
+          Ajouter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

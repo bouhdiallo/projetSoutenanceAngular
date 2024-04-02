@@ -1,0 +1,175 @@
+<app-header></app-header>
+
+<div class="container-fluid py-6 my-3">
+  <img src="assets/img/bannerBien.png" alt="" class="w-100 bien shadow">
+</div>
+
+<div class="container text-center mb-4">
+  <div class="row">
+    <div class="col-sm-12 col-lg-4">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Rechercher un bien" aria-label="Rechercher"
+           [(ngModel)]="filterValue" (keyup)="onSearch()" aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
+            class="fa-solid fa-magnifying-glass" style="color: #FF9700;"></i></button>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-lg-4 ms-auto">
+      <button type="button" class="btn btn-custom btn-md" data-bs-toggle="modal"
+      data-bs-target="#exampleModal">Ajouter un bien</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="container mb-4">
+  <div class="row g-4">
+    <div class="col-sm-12 col-md-6  col-lg-4" *ngFor="let item of bienListFilter | slice:(pageActuelle - 1) * articleParPage:(pageActuelle * articleParPage)" >
+      <div class="card shadow">
+        <img  src="http://localhost:8000/images/{{this.item.images}}" class="card-img-top rounded-top" alt="Designer desk">
+        <div class="card-body">
+
+          <h3 class="h5 card-title mt-4">{{item.nom}}</h3>
+          <p class="card-text">{{item.caracteristique}} </p>
+            <div class="media d-flex align-items-center justify-content-between">
+              <div class="post-group">
+                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="23k followers">
+                  {{item.contact}}
+                </a>
+              </div>
+              <div class="d-flex align-items-center">
+                <span class="small">{{item.statut}}</span>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- pagination -->
+<div class="demo ">
+  <nav class="pagination-outer" aria-label="Page navigation">
+    <div class="pagination shadow-lg">
+        <button class="page-item page-link"  [disabled]="pageActuelle === 1" (click)="pageActuelle = pageActuelle - 1" class="page-link" aria-label="Previous" >
+          <span aria-hidden="true">«</span>
+        </button>
+
+      <button class="page-item page-link active" *ngFor="let page of pages" (click)="pageActuelle = page" class="page-link" [style.background]="page === pageActuelle ? 'orange' : 'white'"> {{ page }}</button>
+        <button class="page-item page-link" [disabled]="pageActuelle === totalPages" (click)="pageActuelle = pageActuelle + 1" class="page-link" aria-label="Next" >
+          <span aria-hidden="true">»</span>
+        </button>
+    </div>
+  </nav>
+</div>
+
+<app-footer></app-footer>
+
+<!-- Modal ajout-->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Ajout bien</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form action="">
+        <div class="modal-body">
+          <div class="row">
+             <div class="form-group col-md-6">
+            <label for="nom">Nom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nom"
+              placeholder="Nom"
+              name="nom"
+              [(ngModel)]="nom" (input)="verifNomFonction()"
+            />
+            <p class="text-danger" *ngIf="!exactNom">{{verifNom}}</p>
+                <p class="text-success" *ngIf="exactNom"><i class="bi bi-check2-all"></i> Exact !</p>
+
+          </div>
+             <div class="form-group col-md-6">
+            <label for="image">Image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="image"
+              placeholder=""
+              name="image"
+              (change)="getFile($event)" (input)="verifImageFonction()"
+            />
+            <p class="text-danger" *ngIf="!exactImage">{{verifImage}}</p>
+                <p class="text-success" *ngIf="exactImage"><i class="bi bi-check2-all"></i> Exact !</p>
+
+          </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+            <label for="contact">Contact</label>
+            <input
+              type="text"
+              class="form-control"
+              id="contact"
+              placeholder="Contact"
+              name="contact"
+              [(ngModel)]="contact" (input)="verifContactFonction()"
+            />
+            <p class="text-danger" *ngIf="!exactContact">{{verifContact}}</p>
+                <p class="text-success" *ngIf="exactContact"><i class="bi bi-check2-all"></i> Exact !</p>
+
+          </div>
+          <div class="form-group  col-md-6">
+            <label for="date">Status</label>
+            <select [(ngModel)]="statut" name="statut" class="w-100 h-50" (input)="verifStatutFonction()">
+              <option value="perdu">perdu</option>
+              <option value="retrouver">retrouver</option>
+            </select>
+            <p class="text-danger" *ngIf="!exactStatut">{{verifStatut}}</p>
+                <p class="text-success" *ngIf="exactStatut"><i class="bi bi-check2-all"></i> Exact !</p>
+          </div>
+        </div>
+        <div class="form-group">
+            <label for="date">Caracteristique</label>
+            <textarea  type="text"
+              class="form-control"
+              id="caracteristique"
+              placeholder="Caracteristique"
+              name="caracteristique"
+              [(ngModel)]="caracteristique" (input)="verifCarateristiqueFonction()"></textarea>
+            <p class="text-danger" *ngIf="!exactCaracteristique">{{verifCaracteristique}}</p>
+                <p class="text-success" *ngIf="exactCaracteristique"><i class="bi bi-check2-all"></i> Exact !</p>
+
+        </div>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" *ngIf="exactNom == false || exactCaracteristique == false || exactContact == false || exactImage == false || exactStatut == false" disabled >
+          Ajouter
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()" *ngIf="exactNom === true && exactCaracteristique === true && exactContact === true && exactImage === true  && exactStatut === true" data-bs-dismiss="modal" >
+          Ajouter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

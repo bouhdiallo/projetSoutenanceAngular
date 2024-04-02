@@ -1,0 +1,84 @@
+
+<app-header></app-header>
+<br><br>
+ <div class="container-fluid py-0  my-5 w-100">
+  <div class="col-12 col-md-12">
+       <div class="card bg-light  shadow">
+            <div class="card-body p-5">
+                <h3 class="h4 card-title mb-5 text-center">Nos details des annonces</h3>
+
+            </div>
+        </div>
+  </div>
+</div>
+<div class="container" *ngIf="annonce">
+
+      <div class="col-12 col-md-12" >
+        <div class="card shadow">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-4">
+              <img src="http://localhost:8000/images/{{annonce.images}}" class="card-img rounded-start" alt="Artist desk"/>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <p>Lieu:{{annonce.lieu
+                  }}
+                </p>
+
+                <p class="card-text mb-4">{{annonce.description}}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="card-text small"><span class="far fa-calendar-alt me-2"></span>Date:{{annonce.date_activite}}</span>
+                  <a data-bs-toggle="modal" data-bs-target="#modal-default" class="small"><span class="far fa-comments me-2"></span>comment</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+<section class="content-item" id="comments">
+    <div class="container">
+    	<div class="row">
+            <div class="col-sm-12">
+
+                <h3>{{this.commentAnnonce.length}} comments</h3>
+
+                <!-- COMMENT 1 - START -->
+                <div class="media "  *ngFor="let item of commentAnnonce ">
+                    <a class="pull-left" ><img class="media-object rounded-circle" style="width: 50px;height: 50px;" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""></a>
+                    <div class="media-body border ">
+                        <h4 class="media-heading">John Doe</h4>
+                        <p>{{item.description}}</p>
+                        <!-- <ul class="list-unstyled list-inline media-detail pull-left"> -->
+                            <p><i class="fa fa-calendar mx-2"></i>{{item.created_at | date:"MMM dd, yyyy"}}</p>
+                        <!-- </ul> -->
+
+                    </div>
+                </div>
+                <!-- COMMENT 1 - END -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- commentaire -->
+<div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h6 modal-title">Commentaire</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-footer">
+              <input type="text" [(ngModel)]="description" name="description">
+                <button type="button" class="btn btn-secondary" (click)="ajoutComment()" data-bs-dismiss="modal">Envoyer</button>
+                <button type="button" class="btn btn-link text-gray ms-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<app-footer></app-footer>

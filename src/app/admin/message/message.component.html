@@ -1,0 +1,238 @@
+<!-- SIDEBAR -->
+<section id="sidebar" [ngClass]="status ? 'hide' : ''">
+  <!-- -->
+  <div class="logo">
+
+    <img src="assets/img/logo.png" alt="" style="width: 100px;height: 100px;">
+  </div>
+
+  <ul class="side-menu top">
+    <li>
+      <a routerLink="/dash">
+        <i class="bx bxs-dashboard" style="color: #FF9700;"></i>
+        <span class="text">Dashboard</span>
+      </a>
+    </li>
+    <li >
+      <a routerLink="/gestion-annonce">
+        <i class="fa-solid fa-bullhorn fa-sm me-2 mx-2" style="color: #FF9700;"></i>
+        <span class="text">Gestion Annonces</span>
+      </a>
+    </li>
+    <li >
+      <a routerLink="/gestion-ressource">
+         <i class="fa-solid fa-file-invoice fa-sm mb-2 mx-2 my-1" style="color: #FF9700;"></i>
+        <span class="text">Gestion Ressources</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/gestion-commentaire">
+        <i class="bx bxs-message-dots bxs-sm  " style="color: #FF9700;"></i>
+        <span class="text">Gestion Commentaires</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/gestion-annuaire">
+       <i class="fa-solid fa-book-open fa-sm me-2 mx-2" style="color: #FF9700;"></i>
+        <span class="text">Gestion Annuaires</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/gestion-bien">
+        <i class="bi bi-arrow-down-left-square-fill mx-2"  style="color: #FF9700;"></i>
+        <span class="text">Gestion Bien</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/gestion-produit">
+        <i class="fa-solid fa-shop fa-sm mx-2 " style="color: #FF9700;"></i>
+        <span class="text">Gestion Produit</span>
+      </a>
+    </li>
+    <li class="active">
+      <a  routerLink="/message">
+      <i class="fa-solid fa-message fa-sm mx-2" style="color: #FF9700;">
+      </i><span class="text">Message</span>
+      </a>
+    </li>
+  </ul>
+  <ul class="side-menu">
+    <li>
+      <a href="#">
+        <i class='bx bxs-cog'></i>
+        <span class="text">Profil</span>
+      </a>
+    </li>
+    <li>
+      <a (click)="logout()" class="logout">
+        <i class='bx bxs-log-out-circle'></i>
+        <span class="text">Deconnexion</span>
+      </a>
+    </li>
+  </ul>
+</section>
+<!-- SIDEBAR -->
+
+
+
+<!-- CONTENT -->
+<section id="content">
+  <!-- NAVBAR -->
+  <nav>
+    <i (click)="addToggle()" class='bx bx-menu'></i>
+    <!-- <a href="#" class="nav-link">Categories</a> -->
+    <form action="#">
+      <div class="form-input">
+        <input type="search" placeholder="Search...">
+        <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+      </div>
+    </form>
+    <a href="#" class="notification">
+      <i class='bx bxs-bell'></i>
+      <span class="num">8</span>
+    </a>
+    <a href="#" class="profile">
+      <img src="https://secure.gravatar.com/avatar/d09eaad01aea86c51b4f892b4f8abf6f?s=100&d=wavatar&r=g">
+    </a>
+  </nav>
+  <!-- NAVBAR -->
+
+  <!-- MAIN -->
+  <main>
+    <div class="head-title">
+      <div class="left">
+        <h1>Dashboard</h1>
+        <ul class="breadcrumb">
+          <li>
+            <a href="#">Dashboard</a>
+          </li>
+          <li><i class='bx bx-chevron-right'></i></li>
+          <li>
+            <a class="active" href="#">Message</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+   <ul class="box-info">
+      <li class="cardTete shadow">
+        <i class='bx'><i class="fa-solid fa-user fa-sm" style="color: #19375c;"></i></i>
+        <span class="text">
+          <h3>{{utilisateurList.length}}</h3>
+          <p>Utilisateurs</p>
+        </span>
+      </li>
+      <li class="cardTete shadow">
+        <i class='bx'><i class="fa-solid fa-bullhorn fa-sm me-2 mx-2" style="color: #FF9700;"></i>
+</i>
+        <span class="text">
+          <h3>{{annonceList.length}}</h3>
+          <p>Annonces</p>
+        </span>
+      </li>
+      <li class="cardTete  shadow">
+        <i class='bx'><i class="fa-solid fa-book-open fa-sm" style="color: #19375c;"></i></i>
+        <span class="text">
+          <h3>{{ressourceList.length}}</h3>
+          <p>Ressources</p>
+        </span>
+      </li>
+    </ul>
+    <!-- corps  -->
+    <!-- <button
+      type="button"
+      class="btn btn-custom text-center mb-2"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+    >
+      Ajouter ressource
+    </button> -->
+     <table class="table" *ngIf="messageList.length < 0">
+      <thead>
+        <tr>
+          <th>N</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="5" class="text-center">Aucune donnees disponible</td>
+        </tr>
+        <tr></tr>
+      </tbody>
+    </table>
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      class="row-border hover table"
+      *ngIf="messageList.length > 0"
+    >
+      <thead>
+        <tr>
+          <th>N</th>
+          <th>Nom</th>
+          <th>Emial</th>
+          <th>Message</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of messageList;let index = index">
+          <td>{{index +1}}</td>
+          <td>{{ item.nom}}</td>
+          <td>{{ item.email}}</td>
+          <td>{{ item.message |slice :0:30}} ...</td>
+          <td>
+            <a data-bs-toggle="modal"
+      data-bs-target="#detail" (click)="getMessage(item)"><i class="fa-solid fa-xl fa-eye me-2 mb-2" style="color: #ff9700;"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </main>
+  <!-- MAIN -->
+</section>
+<!-- CONTENT -->
+
+<!-- Button trigger modal -->
+
+
+<!-- modal details -->
+<div class="modal fade" id="detail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Details message</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+    <div>
+      <div class="col-12 col-md-12" >
+        <div class="card shadow">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-8">
+              <div class="card-body">
+                <p>Nom: {{this.messageSelectionner.nom
+                  }}
+                </p>
+                <p class="card-text mb-4">{{this.messageSelectionner.email}}</p>
+                <p class="card-text mb-4">{{this.messageSelectionner.message}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
